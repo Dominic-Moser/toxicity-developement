@@ -1,76 +1,152 @@
 "use client";
-import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
-export default function Home() {
-  const [divs, setDivs] = useState([]);
-  const [prevX, setPrevX] = useState(null);
-  const [prevY, setPrevY] = useState(null);
-  const [id, setId] = useState(0); // Add this line
-
-  let isDo = false;
-
-  const spawnDivAtCoordinates = (x, y) => {
-    setDivs((prevDivs) => [...prevDivs, { x, y, id }]);
-    setId(id + 1); // Increment the id each time a div is created
-  };
-
-  useEffect(() => {
-    if (prevX !== null && prevY !== null) {
-      spawnDivAtCoordinates(prevX, prevY);
-    }
-    if (divs.length > 35) {
-      divs.shift();
-    }
-  }, [prevX, prevY]);
-
+export default function cyptography() {
+  const [globalCount, setGlobalCount] = useState(0);
   return (
-    <main
-      className="w-[100vw] h-[100vh] overflow-hidden"
-      onMouseMove={(e) => {
-        const dist = Math.sqrt(
-          (prevX - e.clientX) * (prevX - e.clientX) +
-            (prevY - e.clientY) * (prevY - e.clientY)
-        );
-        if (dist > 35) {
-          setPrevX(e.clientX);
-          setPrevY(e.clientY);
-        }
-      }}
-    >
-      {divs.map((div) => (
-        <div
-          key={div.id} // Use div.id as the key
-          style={{
-            position: "absolute",
-            top: `${div.y - 40}px`,
-            left: `${div.x}px`,
-          }}
-          className={`bg-transparent w-12 h-12 overflow-clip cursor-default select-none`}
-        >
-          {div.id % 2 === 0 ? "do" : "shit"}
-        </div>
-      ))}
-
-      {divs.length > 20 ? <ExitButton divs={divs} /> : ""}
-    </main>
+    <div className="w-full h-full text-zinc-700 cursor-default overflow-hidden">
+      <div className="h-[100vh] overflow-y-hidden select-none relative">
+        <CryptBackground
+          className=""
+          setGlobalCount={setGlobalCount}
+          globalCount={globalCount}
+        />
+        <CryptLogo className="" />
+      </div>
+    </div>
   );
 }
 
-const ExitButton = ({ divs }) => {
-  return divs[divs.length - 1].id > 200 ? (
-    <div className="w-[100vw] flex items-center justify-center m-2">
-      <div className="-rotate-90 translate-x-5">
-        click me
-      </div>
-      <div 
-      className="bg-white text-black font-serif text-[6rem] text-center p-1 cursor-default z-20 select-none"
-      onClick={(e)=>console.log("")}
-      >
-        wdym?
+const CryptLogo = () => {
+  const [logo, setLogo] = useState("");
+
+  useEffect(() => {
+    fetch("/logo.txt") // Replace with the path to your text file
+      .then((response) => response.text())
+      .then((data) => setLogo(data));
+  }, []);
+
+  return (
+    <div className="w-[100vw] h-[100vh] bg-transparent flex justify-center items-center absolute top-0 left-0 pointer-events-none text-zinc-200 ">
+      <div className="bg-transparent top-0 left-0 text-mono z-0  relative ">
+        <pre className="relative ">
+          <p className=" opacity-80 pointer-events-none">{logo}</p>
+          <Menu className="" />
+        </pre>
       </div>
     </div>
-  ) : (
-    ""
   );
 };
+
+const CryptBackground = (setGlobalCount, globalCount) => {
+  {
+    return (
+      <>
+        {[...Array(Math.floor(window.innerWidth / 27))].map((_, i) => {
+          return (
+            <>
+              <CryptLine
+                className="z-"
+                key={i}
+                index={i}
+                setGlobalCount={setGlobalCount}
+                globalCount={globalCount}
+              />
+            </>
+          );
+        })}
+      </>
+    );
+  }
+};
+
+const Menu = () => {
+  return (
+    <div className=" w-[32%] h-[50%] bottom-0 right-0 absolute bg-black border-solid border-2 border-white pointer-events-auto p-1 pl-1 flex items-center">
+      <p className="self-start underline pl-2">DIRECTORY</p>
+      <MenuItem name="COME BACK LATER" link="/" />
+      {/* <p className="absolute left-[50%] top-[50%] hover:text-red-900">ᛞ</p> */}
+    </div>
+  );
+};
+
+const MenuItem = ({ name, link }) => {
+  return (
+    <>
+      <div
+        className=" w-full absolute pl-2"
+        onClick={(e) => {
+          console.log("redirect to this link :)", link);
+        }}
+      >
+         •  {name}
+      </div>
+      <div className="self-en"></div>
+    </>
+  );
+};
+
+const CryptLine = ({ index, setGlobalCount, globalCount }) => {
+  return (
+    <div
+      className={`text-hide overflow-hide overflow-x-clip overflow-y-clip flex items-center `}
+    >
+      {[...Array(Math.floor(window.innerWidth / 9.4))].map((_, i) => (
+        <RandChar
+          key={i}
+          index={i}
+          setGlobalCount={setGlobalCount}
+          globalCount={globalCount}
+        />
+      ))}
+    </div>
+  );
+};
+
+const RandChar = ({ setGlobalCount, globalCount }) => {
+  const [rand, setRand] = useState("");
+  let intervalId = null;
+
+  useEffect(() => {
+    setRand(getRandChar());
+  }, []);
+
+  const startUpdating = () => {
+    let counter = 0;
+    intervalId = setInterval(() => {
+      if (counter < 10) {
+        setRand(getRandChar());
+        counter++;
+      } else {
+        clearInterval(intervalId);
+      }
+    }, 1); // Change the interval as needed
+  };
+
+  return (
+    <div
+      className="font-mono -translate-x-1 -my-1 hover:text-zinc-100 hover:transition-none transition-color duration-[2s] ease-out text-base"
+      onMouseOver={(e) => {
+        startUpdating();
+      }}
+      onLoad={(e) => {
+        console.log(e);
+        startUpdating();
+      }}
+    >
+      {rand}
+    </div>
+  );
+};
+
+const getRandChar = () => {
+  const allChars =
+    "ABCDEFGHIJKLMOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvqxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+  let char = allChars.charAt(Math.floor(Math.random() * allChars.length));
+  //   console.log(char);
+  return char;
+};
+
+function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
