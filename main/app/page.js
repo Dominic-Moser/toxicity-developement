@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function cyptography() {
+export default function page() {
   const [globalCount, setGlobalCount] = useState(0);
   return (
     <div className="w-full h-full text-zinc-700 cursor-default overflow-hidden">
