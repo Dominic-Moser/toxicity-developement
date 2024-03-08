@@ -39,15 +39,23 @@ const CryptLogo = () => {
 };
 
 const CryptBackground = (setGlobalCount, globalCount) => {
+
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => {
+    setHeight(window.innerHeight);
+  }, []);
+
+
   {
     return (
       <>
-        {[...Array(Math.floor(window.innerWidth / 27))].map((_, i) => {
+        {[...Array(Math.floor(height / 13))].map((_, i) => {
           return (
             <>
               <CryptLine
-                className="z-"
                 key={i}
+                className="z-"
                 index={i}
                 setGlobalCount={setGlobalCount}
                 globalCount={globalCount}
@@ -79,7 +87,7 @@ const MenuItem = ({ name, link }) => {
           console.log("redirect to this link :)", link);
         }}
       >
-         •  {name}
+        • {name}
       </div>
       <div className="self-en"></div>
     </>
@@ -87,11 +95,16 @@ const MenuItem = ({ name, link }) => {
 };
 
 const CryptLine = ({ index, setGlobalCount, globalCount }) => {
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    setWidth(window.innerWidth);
+  }, []);
   return (
     <div
       className={`text-hide overflow-hide overflow-x-clip overflow-y-clip flex items-center `}
     >
-      {[...Array(Math.floor(window.innerWidth / 9.4))].map((_, i) => (
+      {[...Array(Math.floor(width / 9.4))].map((_, i) => (
         <RandChar
           key={i}
           index={i}
@@ -133,6 +146,7 @@ const RandChar = ({ setGlobalCount, globalCount }) => {
         console.log(e);
         startUpdating();
       }}
+      key={rand}
     >
       {rand}
     </div>
