@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function Home() {
+export default function page() {
   const [globalCount, setGlobalCount] = useState(0);
   return (
     <div className="w-full h-full text-zinc-700 cursor-default overflow-hidden">
@@ -11,7 +11,7 @@ export default function Home() {
           setGlobalCount={setGlobalCount}
           globalCount={globalCount}
         />
-        <CryptLogo className="h" />
+        <CryptLogo className="" />
       </div>
     </div>
   );
@@ -38,31 +38,60 @@ const CryptLogo = () => {
   );
 };
 
-const CryptBackground = (setGlobalCount, globalCount) => {
-  const [height, setHeight] = useState(0);
+const CryptBackground = ({ setGlobalCount, globalCount }) => {
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    setHeight(window.innerHeight);
+    setHasMounted(true);
   }, []);
-  {
-    return (
-      <>
-        {[...Array(Math.floor(height / 13))].map((_, i) => {
-          return (
-            <>
-              <CryptLine
-                key={i}
-                className="z-"
-                index={i}
-                setGlobalCount={setGlobalCount}
-                globalCount={globalCount}
-              />
-            </>
-          );
-        })}
-      </>
-    );
+
+  if (!hasMounted) {
+    return null;
   }
+
+  const fontSize = 16; // Replace with your font size
+  const boxWidth = window.innerWidth * 0.7; // 70vw
+  const boxHeight = window.innerHeight * 0.7; // 70vh
+  const charWidth = fontSize * 0.6; // Approximate width of a character
+  const lineHeight = fontSize * 1.2; // Approximate line height
+
+  const lines = Math.floor(boxHeight / lineHeight);
+  const charsPerLine = Math.floor(boxWidth / charWidth);
+
+  return (
+    <>
+      <div className="w-[100vw] h-[100vh] flex items-center justify-center">
+        <div className="max-w-[70vw] max-h-[80vh] overflow-clip">
+          {[...Array(lines)].map((_, i) => (
+            <CryptLine
+              key={i}
+              index={i}
+              setGlobalCount={setGlobalCount}
+              globalCount={globalCount}
+              charsPerLine={charsPerLine}
+            />
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
+
+const CryptLine = ({ index, setGlobalCount, globalCount, charsPerLine }) => {
+  return (
+    <div
+      className={`text-hide overflow-hide overflow-x-clip overflow-y-clip flex items-center `}
+    >
+      {[...Array(charsPerLine)].map((_, i) => (
+        <RandChar
+          key={i}
+          index={i}
+          setGlobalCount={setGlobalCount}
+          globalCount={globalCount}
+        />
+      ))}
+    </div>
+  );
 };
 
 const Menu = () => {
@@ -79,38 +108,15 @@ const MenuItem = ({ name, link }) => {
   return (
     <>
       <div
-        className=" w-full absolute pl-2 flex items-center"
+        className=" w-full absolute pl-2 flex"
         onClick={(e) => {
           console.log("redirect to this link :)", link);
         }}
       >
-         <p>• </p>  
-         <p className=" hover:underline">{name}</p>
+        <p> • </p> <p className="hover:underline">{name}</p>
       </div>
       <div className="self-en"></div>
     </>
-  );
-};
-
-const CryptLine = ({ index, setGlobalCount, globalCount }) => {
-  const [width, setWidth] = useState(0);
-
-  useEffect(() => {
-    setWidth(window.innerWidth);
-  }, []);
-  return (
-    <div
-      className={`text-hide overflow-hide overflow-x-clip overflow-y-clip flex items-center `}
-    >
-      {[...Array(Math.floor(width / 9.4))].map((_, i) => (
-        <RandChar
-          key={i}
-          index={i}
-          setGlobalCount={setGlobalCount}
-          globalCount={globalCount}
-        />
-      ))}
-    </div>
   );
 };
 
@@ -131,12 +137,12 @@ const RandChar = ({ setGlobalCount, globalCount }) => {
       } else {
         clearInterval(intervalId);
       }
-    }, 50); 
+    }, 1); // Change the interval as needed
   };
 
   return (
     <div
-      className="font-mono -translate-x-1 -my-1 hover:text-zinc-100 hover:transition-none transition-color duration-1000 ease-out text-base"
+      className="font-mono -translate-x-1 -my-1 hover:text-zinc-100 hover:transition-none transition-color duration-[2s] ease-out text-base"
       onMouseOver={(e) => {
         startUpdating();
       }}
@@ -144,7 +150,6 @@ const RandChar = ({ setGlobalCount, globalCount }) => {
         console.log(e);
         startUpdating();
       }}
-      key={rand}
     >
       {rand}
     </div>
