@@ -45,7 +45,7 @@ const CryptBackground = (setGlobalCount, globalCount) => {
   useEffect(() => {
     setHeight(window.innerHeight);
   }, []);
-
+//haha
 
   {
     return (
