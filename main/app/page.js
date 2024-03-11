@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function cyptography() {
+export default function Home() {
   const [globalCount, setGlobalCount] = useState(0);
   return (
     <div className="w-full h-full text-zinc-700 cursor-default overflow-hidden">
@@ -11,7 +11,7 @@ export default function cyptography() {
           setGlobalCount={setGlobalCount}
           globalCount={globalCount}
         />
-        <CryptLogo className="" />
+        <CryptLogo className="h" />
       </div>
     </div>
   );
@@ -39,10 +39,15 @@ const CryptLogo = () => {
 };
 
 const CryptBackground = (setGlobalCount, globalCount) => {
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => {
+    setHeight(window.innerHeight);
+  }, []);
   {
     return (
       <>
-        {[...Array(Math.floor(window.innerWidth / 27))].map((_, i) => {
+        {[...Array(Math.floor(height / 13))].map((_, i) => {
           return (
             <>
               <CryptLine
@@ -74,12 +79,13 @@ const MenuItem = ({ name, link }) => {
   return (
     <>
       <div
-        className=" w-full absolute pl-2"
+        className=" w-full absolute pl-2 flex items-center"
         onClick={(e) => {
           console.log("redirect to this link :)", link);
         }}
       >
-         •  {name}
+         <p>• </p>  
+         <p className=" hover:underline">{name}</p>
       </div>
       <div className="self-en"></div>
     </>
@@ -87,11 +93,16 @@ const MenuItem = ({ name, link }) => {
 };
 
 const CryptLine = ({ index, setGlobalCount, globalCount }) => {
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    setWidth(window.innerWidth);
+  }, []);
   return (
     <div
       className={`text-hide overflow-hide overflow-x-clip overflow-y-clip flex items-center `}
     >
-      {[...Array(Math.floor(window.innerWidth / 9.4))].map((_, i) => (
+      {[...Array(Math.floor(width / 9.4))].map((_, i) => (
         <RandChar
           key={i}
           index={i}
@@ -120,7 +131,7 @@ const RandChar = ({ setGlobalCount, globalCount }) => {
       } else {
         clearInterval(intervalId);
       }
-    }, 1); // Change the interval as needed
+    }, 50); 
   };
 
   return (
