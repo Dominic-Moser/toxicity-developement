@@ -77,6 +77,42 @@ const CryptBackground = ({ setGlobalCount, globalCount }) => {
   );
 };
 
+const RandChar = ({ setGlobalCount, globalCount }) => {
+  const [rand, setRand] = useState("");
+  let intervalId = null;
+
+  useEffect(() => {
+    setRand(getRandChar());
+  }, []);
+
+  const startUpdating = async () => {
+    let counter = 0;
+    intervalId = setInterval(() => {
+      if (counter < 10) {
+        setRand(getRandChar());
+        counter++;
+      } else {
+        clearInterval(intervalId);
+      }
+    }, 100); // Change the interval as needed
+  };
+
+  return (
+    <div
+      className="font-mono -translate-x-1 -my-1 hover:text-zinc-100 hover:transition-none transition-color duration-[2s] ease-out text-base"
+      onMouseOver={(e) => {
+        startUpdating();
+      }}
+      onLoad={(e) => {
+        console.log(e);
+        startUpdating();
+      }}
+    >
+      {rand}
+    </div>
+  );
+};
+
 const CryptLine = ({ index, setGlobalCount, globalCount, charsPerLine }) => {
   return (
     <div
@@ -104,6 +140,14 @@ const Menu = () => {
   );
 };
 
+const getRandChar = () => {
+  const allChars =
+    "ABCDEFGHIJKLMOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvqxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя";
+  let char = allChars.charAt(Math.floor(Math.random() * allChars.length));
+  //   console.log(char);
+  return char;
+};
+
 const MenuItem = ({ name, link }) => {
   return (
     <>
@@ -120,49 +164,7 @@ const MenuItem = ({ name, link }) => {
   );
 };
 
-const RandChar = ({ setGlobalCount, globalCount }) => {
-  const [rand, setRand] = useState("");
-  let intervalId = null;
 
-  useEffect(() => {
-    setRand(getRandChar());
-  }, []);
-
-  const startUpdating = () => {
-    let counter = 0;
-    intervalId = setInterval(() => {
-      if (counter < 10) {
-        setRand(getRandChar());
-        counter++;
-      } else {
-        clearInterval(intervalId);
-      }
-    }, 1); // Change the interval as needed
-  };
-
-  return (
-    <div
-      className="font-mono -translate-x-1 -my-1 hover:text-zinc-100 hover:transition-none transition-color duration-[2s] ease-out text-base"
-      onMouseOver={(e) => {
-        startUpdating();
-      }}
-      onLoad={(e) => {
-        console.log(e);
-        startUpdating();
-      }}
-    >
-      {rand}
-    </div>
-  );
-};
-
-const getRandChar = () => {
-  const allChars =
-    "ABCDEFGHIJKLMOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvqxyzабвгдеёжзийклмнопрстуфхцчшщъыьэюя";
-  let char = allChars.charAt(Math.floor(Math.random() * allChars.length));
-  //   console.log(char);
-  return char;
-};
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
