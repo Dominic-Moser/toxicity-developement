@@ -38,26 +38,60 @@ const CryptLogo = () => {
   );
 };
 
-const CryptBackground = (setGlobalCount, globalCount) => {
-  {
-    return (
-      <>
-        {[...Array(Math.floor(window.innerWidth / 27))].map((_, i) => {
-          return (
-            <>
-              <CryptLine
-                className="z-"
-                key={i}
-                index={i}
-                setGlobalCount={setGlobalCount}
-                globalCount={globalCount}
-              />
-            </>
-          );
-        })}
-      </>
-    );
+const CryptBackground = ({ setGlobalCount, globalCount }) => {
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
+  if (!hasMounted) {
+    return null;
   }
+
+  const fontSize = 16; // Replace with your font size
+  const boxWidth = window.innerWidth * 0.7; // 70vw
+  const boxHeight = window.innerHeight * 0.7; // 70vh
+  const charWidth = fontSize * 0.6; // Approximate width of a character
+  const lineHeight = fontSize * 1.2; // Approximate line height
+
+  const lines = Math.floor(boxHeight / lineHeight);
+  const charsPerLine = Math.floor(boxWidth / charWidth);
+
+  return (
+    <>
+      <div className="w-[100vw] h-[100vh] flex items-center justify-center">
+        <div className="max-w-[70vw] max-h-[80vh] overflow-clip">
+          {[...Array(lines)].map((_, i) => (
+            <CryptLine
+              key={i}
+              index={i}
+              setGlobalCount={setGlobalCount}
+              globalCount={globalCount}
+              charsPerLine={charsPerLine}
+            />
+          ))}
+        </div>
+      </div>
+    </>
+  );
+};
+
+const CryptLine = ({ index, setGlobalCount, globalCount, charsPerLine }) => {
+  return (
+    <div
+      className={`text-hide overflow-hide overflow-x-clip overflow-y-clip flex items-center `}
+    >
+      {[...Array(charsPerLine)].map((_, i) => (
+        <RandChar
+          key={i}
+          index={i}
+          setGlobalCount={setGlobalCount}
+          globalCount={globalCount}
+        />
+      ))}
+    </div>
+  );
 };
 
 const Menu = () => {
@@ -74,32 +108,15 @@ const MenuItem = ({ name, link }) => {
   return (
     <>
       <div
-        className=" w-full absolute pl-2"
+        className=" w-full absolute pl-2 flex"
         onClick={(e) => {
           console.log("redirect to this link :)", link);
         }}
       >
-         •  {name}
+        <p> • </p> <p className="hover:underline">{name}</p>
       </div>
       <div className="self-en"></div>
     </>
-  );
-};
-
-const CryptLine = ({ index, setGlobalCount, globalCount }) => {
-  return (
-    <div
-      className={`text-hide overflow-hide overflow-x-clip overflow-y-clip flex items-center `}
-    >
-      {[...Array(Math.floor(window.innerWidth / 9.4))].map((_, i) => (
-        <RandChar
-          key={i}
-          index={i}
-          setGlobalCount={setGlobalCount}
-          globalCount={globalCount}
-        />
-      ))}
-    </div>
   );
 };
 
