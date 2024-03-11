@@ -138,7 +138,7 @@ const RandChar = ({ setGlobalCount, globalCount }) => {
 
   return (
     <div
-      className="font-mono -translate-x-1 -my-1 hover:text-zinc-100 hover:transition-none transition-color duration-[2s] ease-out text-base"
+      className="font-mono -translate-x-1 -my-1 hover:text-zinc-100 hover:transition-none transition-color duration-1000 ease-out text-base"
       onMouseOver={(e) => {
         startUpdating();
       }}
