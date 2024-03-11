@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function Home() {
+export default function page() {
   const [globalCount, setGlobalCount] = useState(0);
   return (
     <div className="w-full h-full text-zinc-700 cursor-default overflow-hidden">
@@ -11,7 +11,7 @@ export default function Home() {
           setGlobalCount={setGlobalCount}
           globalCount={globalCount}
         />
-        <CryptLogo className="h" />
+        <CryptLogo className="" />
       </div>
     </div>
   );
@@ -39,20 +39,15 @@ const CryptLogo = () => {
 };
 
 const CryptBackground = (setGlobalCount, globalCount) => {
-  const [height, setHeight] = useState(0);
-
-  useEffect(() => {
-    setHeight(window.innerHeight);
-  }, []);
   {
     return (
       <>
-        {[...Array(Math.floor(height / 13))].map((_, i) => {
+        {[...Array(Math.floor(window.innerWidth / 27))].map((_, i) => {
           return (
             <>
               <CryptLine
-                key={i}
                 className="z-"
+                key={i}
                 index={i}
                 setGlobalCount={setGlobalCount}
                 globalCount={globalCount}
@@ -79,13 +74,12 @@ const MenuItem = ({ name, link }) => {
   return (
     <>
       <div
-        className=" w-full absolute pl-2 flex items-center"
+        className=" w-full absolute pl-2"
         onClick={(e) => {
           console.log("redirect to this link :)", link);
         }}
       >
-         <p>• </p>  
-         <p className=" hover:underline">{name}</p>
+         •  {name}
       </div>
       <div className="self-en"></div>
     </>
@@ -93,16 +87,11 @@ const MenuItem = ({ name, link }) => {
 };
 
 const CryptLine = ({ index, setGlobalCount, globalCount }) => {
-  const [width, setWidth] = useState(0);
-
-  useEffect(() => {
-    setWidth(window.innerWidth);
-  }, []);
   return (
     <div
       className={`text-hide overflow-hide overflow-x-clip overflow-y-clip flex items-center `}
     >
-      {[...Array(Math.floor(width / 9.4))].map((_, i) => (
+      {[...Array(Math.floor(window.innerWidth / 9.4))].map((_, i) => (
         <RandChar
           key={i}
           index={i}
@@ -131,12 +120,12 @@ const RandChar = ({ setGlobalCount, globalCount }) => {
       } else {
         clearInterval(intervalId);
       }
-    }, 50); 
+    }, 1); // Change the interval as needed
   };
 
   return (
     <div
-      className="font-mono -translate-x-1 -my-1 hover:text-zinc-100 hover:transition-none transition-color duration-1000 ease-out text-base"
+      className="font-mono -translate-x-1 -my-1 hover:text-zinc-100 hover:transition-none transition-color duration-[2s] ease-out text-base"
       onMouseOver={(e) => {
         startUpdating();
       }}
@@ -144,7 +133,6 @@ const RandChar = ({ setGlobalCount, globalCount }) => {
         console.log(e);
         startUpdating();
       }}
-      key={rand}
     >
       {rand}
     </div>
