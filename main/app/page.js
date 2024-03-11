@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-export default function page() {
+export default function Home() {
   const [globalCount, setGlobalCount] = useState(0);
   return (
     <div className="w-full h-full text-zinc-700 cursor-default overflow-hidden">
@@ -11,7 +11,7 @@ export default function page() {
           setGlobalCount={setGlobalCount}
           globalCount={globalCount}
         />
-        <CryptLogo className="" />
+        <CryptLogo className="h" />
       </div>
     </div>
   );
@@ -39,14 +39,11 @@ const CryptLogo = () => {
 };
 
 const CryptBackground = (setGlobalCount, globalCount) => {
-
   const [height, setHeight] = useState(0);
 
   useEffect(() => {
     setHeight(window.innerHeight);
   }, []);
-//haha
-
   {
     return (
       <>
@@ -82,12 +79,13 @@ const MenuItem = ({ name, link }) => {
   return (
     <>
       <div
-        className=" w-full absolute pl-2"
+        className=" w-full absolute pl-2 flex items-center"
         onClick={(e) => {
           console.log("redirect to this link :)", link);
         }}
       >
-        • {name}
+         <p>• </p>  
+         <p className=" hover:underline">{name}</p>
       </div>
       <div className="self-en"></div>
     </>
@@ -133,7 +131,7 @@ const RandChar = ({ setGlobalCount, globalCount }) => {
       } else {
         clearInterval(intervalId);
       }
-    }, 1); // Change the interval as needed
+    }, 50); 
   };
 
   return (
