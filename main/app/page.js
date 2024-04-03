@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function page() {
@@ -113,7 +114,7 @@ const RandChar = ({ setGlobalCount, globalCount }) => {
   );
 };
 
-const CryptLine = ({ index, setGlobalCount, globalCount, charsPerLine }) => {
+export const CryptLine = ({ index, setGlobalCount, globalCount, charsPerLine }) => {
   return (
     <div
       className={`text-hide overflow-hide overflow-x-clip overflow-y-clip flex items-center `}
@@ -134,7 +135,7 @@ const Menu = () => {
   return (
     <div className=" w-[32%] h-[50%] bottom-0 right-0 absolute bg-black border-solid border-2 border-white pointer-events-auto p-1 pl-1 flex items-center">
       <p className="self-start underline pl-2">DIRECTORY</p>
-      <MenuItem name="COME BACK LATER" link="/" />
+      <MenuItem name="Tally" link="/tally" />
       {/* <p className="absolute left-[50%] top-[50%] hover:text-red-900">ᛞ</p> */}
     </div>
   );
@@ -149,12 +150,13 @@ const getRandChar = () => {
 };
 
 const MenuItem = ({ name, link }) => {
+  const rounter = useRouter();
   return (
     <>
       <div
         className=" w-full absolute pl-2 flex"
         onClick={(e) => {
-          console.log("redirect to this link :)", link);
+          rounter.push(link);
         }}
       >
         <p> • </p> <p className="hover:underline">{name}</p>
